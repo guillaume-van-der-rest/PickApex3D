@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Project SYSTEM "Project-5.1.dtd">
+<!-- eric project file for project PickApeX3D -->
+<!-- Saved: 2016-04-28, 15:15:07 -->
+<!-- Copyright (C) 2016 Guillaume van der Rest, guillaume.van-der-rest@u-psud.fr -->
+<Project version="5.1">
+  <Language>en_US</Language>
+  <Hash>7e4a41344870abdbe9902d0a3306e442caa723cc</Hash>
+  <ProgLanguage mixed="0">Python3</ProgLanguage>
+  <ProjectType>PyQt5</ProjectType>
+  <Description>Extracts and displays points from an ApeX3D file for multiply charged proteins. Allows selection of points.</Description>
+  <Version>0.1</Version>
+  <Author>Guillaume van der Rest</Author>
+  <Email>guillaume.van-der-rest@u-psud.fr</Email>
+  <Eol index="-1"/>
+  <Sources>
+    <Source>PickApex3D.py</Source>
+    <Source>Ui_PickApex3D.py</Source>
+    <Source>__init__.py</Source>
+    <Source>processApex3D.py</Source>
+  </Sources>
+  <Forms>
+    <Form>PickApex3D.ui</Form>
+  </Forms>
+  <Translations/>
+  <Resources/>
+  <Interfaces/>
+  <Others/>
+  <MainScript>PickApex3D.py</MainScript>
+  <Vcs>
+    <VcsType>None</VcsType>
+  </Vcs>
+  <FiletypeAssociations>
+    <FiletypeAssociation pattern="*.idl" type="INTERFACES"/>
+    <FiletypeAssociation pattern="*.py" type="SOURCES"/>
+    <FiletypeAssociation pattern="*.py3" type="SOURCES"/>
+    <FiletypeAssociation pattern="*.pyw" type="SOURCES"/>
+    <FiletypeAssociation pattern="*.pyw3" type="SOURCES"/>
+    <FiletypeAssociation pattern="*.qm" type="TRANSLATIONS"/>
+    <FiletypeAssociation pattern="*.qrc" type="RESOURCES"/>
+    <FiletypeAssociation pattern="*.ts" type="TRANSLATIONS"/>
+    <FiletypeAssociation pattern="*.ui" type="FORMS"/>
+  </FiletypeAssociations>
+</Project>
