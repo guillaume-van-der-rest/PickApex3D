@@ -30,7 +30,7 @@ class CCS_Data(object):
         Args:
             csf_file (str): Path to the file to be written to.
         """
-        self.data_CCS.to_csv(csv_file, sep='\t', decimal=',')
+        self.data_CCS.to_csv(csv_file)
         
     def process(self, parameters):
         """Process the data to keep only values which fall within a defined m/z range.
@@ -45,7 +45,7 @@ class CCS_Data(object):
             mz = (parameters['M'] + i * self.m_charge_ion) / i
             mz_min = mz * (1 - parameters['ppm']/1000000)
             mz_max = mz * (1 + parameters['ppm']/1000000)
-            filtered_table = self.data[(self.data['m_z'] > mz_min) & (self.data['m_z'] < mz_max)  & (self.data['inten']>2000)]
+            filtered_table = self.data[(self.data['m_z'] > mz_min) & (self.data['m_z'] < mz_max) & (self.data['inten']>100)]
             filtered_table['z'] = i
             result_set.append(filtered_table)
         fdata = pd.concat(result_set)

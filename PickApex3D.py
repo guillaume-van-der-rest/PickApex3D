@@ -58,16 +58,16 @@ class PickApex3D(QtWidgets.QMainWindow, Ui_PickApex3D):
         ispositivedouble.setBottom(0)
         ispositiveint=QtGui.QIntValidator()
         ispositiveint.setBottom(0)
-        self.NeutralMass.setValidator(ispositivedouble)
-        self.MassAccuracy.setValidator(ispositivedouble)
+#        self.NeutralMass.setValidator(ispositivedouble)
+#        self.MassAccuracy.setValidator(ispositivedouble)
         self.MinCS.setValidator(ispositiveint)
         self.MaxCS.setValidator(ispositiveint)
-        self.Calibration_a.setValidator(isdouble)
-        self.Calibration_b.setValidator(isdouble)
-        self.Calibration_X.setValidator(isdouble)
-        self.TransferParam.setValidator(ispositivedouble)
-        self.PusherDelay.setValidator(ispositivedouble)
-        self.Gas_mass.setValidator(ispositivedouble)
+#        self.Calibration_a.setValidator(isdouble)
+#        self.Calibration_b.setValidator(isdouble)
+#        self.Calibration_X.setValidator(isdouble)
+#        self.TransferParam.setValidator(ispositivedouble)
+#        self.PusherDelay.setValidator(ispositivedouble)
+#        self.Gas_mass.setValidator(ispositivedouble)
 
     def setInitialUIvalues(self):
         self.NeutralMass.setText(lstr(22870))
@@ -143,8 +143,6 @@ class PickApex3D(QtWidgets.QMainWindow, Ui_PickApex3D):
         self.plotLayers = [0]
         self.currentSeries = 1
         self.ax  = self.fig.add_subplot(111)
-        print(locale.getlocale(category=locale.LC_NUMERIC))
-        print("2" + locale.localeconv()['decimal_point'])
         self.data.plot(self.ax)
         print(locale.getlocale(category=locale.LC_NUMERIC))
         print("3" + locale.localeconv()['decimal_point'])
