@@ -14,8 +14,6 @@ from matplotlib.backends.backend_qt5agg import (
     FigureCanvasQTAgg as FigureCanvas,
     NavigationToolbar2QT as NavigationToolbar)
 from locale import atof,  atoi,  str as lstr
-import locale
-
 
 from Ui_PickApex3D import Ui_PickApex3D
 from processApex3D import CCS_Data
@@ -58,16 +56,16 @@ class PickApex3D(QtWidgets.QMainWindow, Ui_PickApex3D):
         ispositivedouble.setBottom(0)
         ispositiveint=QtGui.QIntValidator()
         ispositiveint.setBottom(0)
-#        self.NeutralMass.setValidator(ispositivedouble)
-#        self.MassAccuracy.setValidator(ispositivedouble)
+        self.NeutralMass.setValidator(ispositivedouble)
+        self.MassAccuracy.setValidator(ispositivedouble)
         self.MinCS.setValidator(ispositiveint)
         self.MaxCS.setValidator(ispositiveint)
-#        self.Calibration_a.setValidator(isdouble)
-#        self.Calibration_b.setValidator(isdouble)
-#        self.Calibration_X.setValidator(isdouble)
-#        self.TransferParam.setValidator(ispositivedouble)
-#        self.PusherDelay.setValidator(ispositivedouble)
-#        self.Gas_mass.setValidator(ispositivedouble)
+        self.Calibration_a.setValidator(isdouble)
+        self.Calibration_b.setValidator(isdouble)
+        self.Calibration_X.setValidator(isdouble)
+        self.TransferParam.setValidator(ispositivedouble)
+        self.PusherDelay.setValidator(ispositivedouble)
+        self.Gas_mass.setValidator(ispositivedouble)
 
     def setInitialUIvalues(self):
         self.NeutralMass.setText(lstr(22870))
@@ -80,7 +78,6 @@ class PickApex3D(QtWidgets.QMainWindow, Ui_PickApex3D):
         self.TransferParam.setText(lstr(1.41))
         self.PusherDelay.setText(lstr(110))
         self.Gas_mass.setText(lstr(28))
-        print(lstr(255.3))
 
     # Connections go here
     def makeConnections(self):
@@ -140,18 +137,11 @@ class PickApex3D(QtWidgets.QMainWindow, Ui_PickApex3D):
             + csv_file)
             return True         
         self.fig.clear()
-        self.plotLayers = [0]
         self.currentSeries = 1
         self.ax  = self.fig.add_subplot(111)
-        self.data.plot(self.ax)
-        print(locale.getlocale(category=locale.LC_NUMERIC))
-        print("3" + locale.localeconv()['decimal_point'])
+        self.plotLayers = { 'main' : self.data.plot(self.ax),  1 : None }
         self.fig.canvas.mpl_connect('pick_event', self.onpick)
-        print(locale.getlocale(category=locale.LC_NUMERIC))
-        print("4" + locale.localeconv()['decimal_point'])
         self.canvas.draw()
-        print(locale.getlocale(category=locale.LC_NUMERIC))
-        print("5" + locale.localeconv()['decimal_point'])
   
         # Make the selectSeries spinBox active and set its initial value as its limits to 
         # sensible values.
@@ -160,8 +150,6 @@ class PickApex3D(QtWidgets.QMainWindow, Ui_PickApex3D):
         self.selectSeries.setMaximum(1)
         self.selectSeries.setValue(1)
         # Initialize the output values for the series.
-        print(locale.getlocale(category=locale.LC_NUMERIC))
-        print(locale.localeconv()['decimal_point'])
         self.updateSeriesTable()
  
     def storeData(self):
@@ -183,16 +171,8 @@ class PickApex3D(QtWidgets.QMainWindow, Ui_PickApex3D):
         return True
         
     def onpick(self, event):
-        plotLevel = self.data.toggleSelected(event.ind[0],  self.currentSeries,  self.ax)
+        self.data.toggleSelected(event.ind[0],  self.plotLayers,  self.currentSeries,  self.ax)
         self.updateSeriesTable()
-        # Plot has been put on top of the layers. So we just need to check if it
-        # is there or if it should be removed from the layers (empty set).
-        if plotLevel :
-            if self.plotLayers[-1] != self.currentSeries :
-                self.plotLayers.append(self.currentSeries)
-        else:
-            if self.plotLayers[-1] == self.currentSeries :
-                self.plotLayers.pop()
 
     def validate_param(self):
         try:
@@ -225,10 +205,7 @@ class PickApex3D(QtWidgets.QMainWindow, Ui_PickApex3D):
     def updateSeries(self, newseries):
         self.data.saveSeries(self.currentSeries)
         self.currentSeries = newseries
-        newPlotPos = self.data.updatePlotSeries(self.currentSeries,  
-            self.plotLayers,  self.ax)
-        if newPlotPos :
-            self.plotLayers.append(self.currentSeries)
+        self.data.updatePlotSeries(self.currentSeries,  self.plotLayers,  self.ax)
         # Failsafe: should not happen because updateSeries is only called by
         # the selectSeries.valueChanged() signal and by saving the file which
         # does not change the series.
@@ -242,13 +219,11 @@ class PickApex3D(QtWidgets.QMainWindow, Ui_PickApex3D):
         self.Output_Series.setRowCount(len(selectedDataStats))
         self.Output_Series.setColumnCount(2)
         for row,  val in enumerate(selectedDataStats):
-            print(lstr(row+0.5))
             label,  value = val
             title = QtWidgets.QTableWidgetItem(label)
             self.Output_Series.setItem(row, 0, title)
             if not isinstance(value,  str):
                 value = lstr(value)
-                print(value)
             value = QtWidgets.QTableWidgetItem(value)
             self.Output_Series.setItem(row,  1,  value)
         self.Output_Series.resizeColumnsToContents()
@@ -256,6 +231,7 @@ class PickApex3D(QtWidgets.QMainWindow, Ui_PickApex3D):
     def nextSeries(self):
         if self.currentSeries >= self.selectSeries.maximum() :
             self.selectSeries.setMaximum(self.currentSeries+1)
+            self.plotLayers[self.currentSeries+1] = None
         self.selectSeries.setValue(self.currentSeries+1)
 
     def prevSeries(self):
